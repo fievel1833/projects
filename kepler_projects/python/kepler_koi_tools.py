@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 
 """Calculates the luminosity of a star given its radius and temperature.
     
@@ -14,12 +13,31 @@ def calculate_luminosity(radius, temperature):
     
     #I obtained this formula from an internet search. It seems accurate,
     #though I don't know how precise it is. This formula is known as
-    #the Stefan-Boltzman Law. https://www.e-education.psu.edu/astro801/content/l3_p5.html
+    #the Stefan-Boltzman Law. https://www.e-education.psu.edu/astro801/content/l3_p5.html.
     radius = radius * 6.957e8
     sigma = 5.670374419e-8
     luminosity = 4 * np.pi * sigma * radius**2 * temperature**4
     
     return luminosity
+
+"""This function iterates through the Kepler data and creates a list of dictionaries,
+where each dictionary represents a processed object (presumably a star-planet system).
+
+    Returns:
+        object_list: A list of dictionaries.
+"""
+def compile_list_of_objects(data):
+    object_list = []
+    
+    for index, row in data[:-1].iterrows():
+        object_name = str(row["kepler_name"])
+        if object_name == "nan": #nan is returned when the object name isn't populated in the koi csv
+            object_name = "OBJECT NAME WASN'T RECORDED" #I feel like there's a better way to do this
+        luminosity = calculate_luminosity(row["koi_srad"], row["koi_steff"])
+        star_color = estimate_star_color(row["koi_steff"])
+        object_list.append({"object_name": object_name, "luminosity": luminosity, "star_color": star_color})
+    
+    return object_list
 
 """This function estimates the color of a star based on its effective temperature, assuming a blackbody model.
 
@@ -48,22 +66,3 @@ def estimate_star_color(object_data):
         return "Orange"
     else:
         return "Red"
-
-"""This function iterates through the Kepler data and creates a list of dictionaries,
-where each dictionary represents a processed object (presumably a star-planet system).
-
-    Returns:
-        object_list: A list of dictionaries.
-"""
-def compile_list_of_objects(data):
-    object_list = []
-    
-    for index, row in data[:-1].iterrows():
-        object_name = str(row["kepler_name"])
-        if object_name == "nan": #nan is returned when the object name isn't populated in the koi csv
-            object_name = "OBJECT NAME WASN'T RECORDED" #I feel like there's a better way to do this
-        luminosity = calculate_luminosity(row["koi_srad"], row["koi_steff"])
-        star_color = estimate_star_color(row["koi_steff"])
-        object_list.append({"object_name": object_name, "luminosity": luminosity, "star_color": star_color})
-    
-    return object_list
