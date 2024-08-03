@@ -29,5 +29,21 @@ data = pd.read_csv(input_path)
 #Add the objects to the record
 #Write the record to a csv
 objects = kepler_koi_tools.compile_list_of_objects(data)
-record_df = pd.DataFrame(objects, columns=["object_name", "luminosity", "star_color"])    
+record_df = pd.DataFrame(objects, columns=["object_name", "luminosity", "star_color", "koi_pdisposition", "koi_disposition"])    
 record_df.to_csv(output_path, mode="w", header=True, index=False)
+
+confirmed_exoplanets, false_positive_exoplanets, candidate_exoplanets, unknown = kepler_koi_tools.get_exoplanet_disposition(data)
+print("Confirmed: " + str(confirmed_exoplanets))
+print("False Positives: " + str(false_positive_exoplanets))
+print("Candidates: " + str(candidate_exoplanets))
+print("Unknowns: " + str(unknown))
+
+host_star_blue, host_star_bluewhite, host_star_white, host_star_yellowwhite, host_star_yellow, \
+   host_star_orange, host_star_red = kepler_koi_tools.get_confirmed_by_star_color(data)
+print("Confirmed blue stars with exoplanets: " + str(host_star_blue))
+print("Confirmed blue-white stars with exoplanets: " + str(host_star_bluewhite))
+print("Confirmed white stars with exoplanets: " + str(host_star_white))
+print("Confirmed yellow-white stars with exoplanets: " + str(host_star_yellowwhite))
+print("Confirmed yellow stars with exoplanets: " + str(host_star_yellow))
+print("Confirmed orange stars with exoplanets: " + str(host_star_orange))
+print("Confirmed red stars with exoplanets: " + str(host_star_red))

@@ -35,7 +35,10 @@ def compile_list_of_objects(data):
             object_name = "OBJECT NAME WASN'T RECORDED" #I feel like there's a better way to do this
         luminosity = calculate_luminosity(row["koi_srad"], row["koi_steff"])
         star_color = estimate_star_color(row["koi_steff"])
-        object_list.append({"object_name": object_name, "luminosity": luminosity, "star_color": star_color})
+        koi_disposition = row["koi_disposition"]
+        koi_pdisposition = row["koi_pdisposition"]
+        object_list.append({"object_name": object_name, "luminosity": luminosity, "star_color": star_color,
+                            "koi_disposition": koi_disposition, "koi_pdisposition": koi_pdisposition})
     
     return object_list
 
@@ -66,3 +69,52 @@ def estimate_star_color(object_data):
         return "Orange"
     else:
         return "Red"
+    
+"""This function groups the exoplanet candidates listed in the KOI by disposition."""    
+def get_exoplanet_disposition(object_data):
+    confirmed = 0
+    false_positives = 0
+    candidates = 0
+    unknown = 0
+    
+    for index, row in object_data[:-1].iterrows():
+        if row["koi_disposition"] == "CONFIRMED":
+            confirmed += 1
+        elif row["koi_disposition"] == "FALSE POSITIVE":
+            false_positives += 1
+        elif row["koi_disposition"] == "CANDIDATE":
+            candidates += 1
+        else:
+            unknown += 1
+    
+    return confirmed, false_positives, candidates, unknown
+        
+def get_confirmed_by_star_color(object_data):
+    host_star_blue = 0
+    host_star_bluewhite = 0
+    host_star_white = 0
+    host_star_yellowwhite = 0
+    host_star_yellow = 0
+    host_star_orange = 0
+    host_star_red = 0
+    
+    for index, row in object_data[:-1].iterrows():
+        if row["koi_disposition"] == "CONFIRMED":
+            
+            host_star = estimate_star_color(row["koi_steff"])
+            if host_star == "Blue":
+                host_star_blue += 1
+            elif host_star == "Blue-white":
+                host_star_bluewhite += 1
+            elif host_star == "White":
+                host_star_white += 1
+            elif host_star == "Yellow-white":
+                host_star_yellowwhite += 1
+            elif host_star == "Yellow":
+                host_star_yellow += 1
+            elif host_star == "Orange":
+                host_star_orange += 1
+            elif host_star == "Red":
+                host_star_red += 1
+                
+    return host_star_blue, host_star_bluewhite, host_star_white, host_star_yellowwhite, host_star_yellow, host_star_orange, host_star_red
