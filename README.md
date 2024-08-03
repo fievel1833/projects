@@ -1,4 +1,4 @@
 # projects
-A collection of projects I'm working on.
+A collection of Kepler projects I'm working on.
 
-I plan to grow this collection to accommodate other data, not just Kepler Objects of Interests. Also, I plan to include other projects within this structure.
+This project (and likely future ones) is a collection of Kepler exploration tools. The intent is to provide interesting obeservations based on the Kepler Objects of Interest list.
