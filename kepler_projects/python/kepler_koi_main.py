@@ -3,10 +3,9 @@ import kepler_koi_tools
 
 """This program reads the Kepler Objects of Interests list and calculates the
    estimated color of the star for each object, based on luminosity. Then, it writes
-   the object name, luminosity, and estimated star color to a csv.
+   the object name, luminosity, estimated star color, and disposition to a csv.
 """
 
-#TODO: return a count for potentially habitable planets by star color
 #TODO: implement habitability analysis using established models
 #TODO: calculate stats for each color group (average luminosity, number of objects, etc.)
 #TODO: implement error handling
@@ -24,22 +23,27 @@ output_path = 'kepler_projects\\python\\kepler_exoplanet_data\\output_cumulative
 #Also, this is a link to the Kepler KOI column definitions in the input file
 #https://exoplanetarchive.ipac.caltech.edu/docs/API_kepcandidate_columns.html.
 data = pd.read_csv(input_path)
-    
+
 #Compile the list
 #Add the objects to the record
 #Write the record to a csv
 objects = kepler_koi_tools.compile_list_of_objects(data)
-record_df = pd.DataFrame(objects, columns=["object_name", "luminosity", "star_color", "koi_pdisposition", "koi_disposition"])    
+record_df = pd.DataFrame(objects, columns=["object_name", "host_luminosity", "host_color", "koi_pdisposition", "koi_disposition"])    
 record_df.to_csv(output_path, mode="w", header=True, index=False)
 
+#Print the results
 confirmed_exoplanets, false_positive_exoplanets, candidate_exoplanets, unknown = kepler_koi_tools.get_exoplanet_disposition(data)
 print("Confirmed: " + str(confirmed_exoplanets))
 print("False Positives: " + str(false_positive_exoplanets))
 print("Candidates: " + str(candidate_exoplanets))
 print("Unknowns: " + str(unknown))
 
+#Interestingly, once the KOI list is parsed, no exoplanets were discovered around blue or blue-white stars.
+#White and red stars had few, and yellow stars had the most. I looked into why and it turns out
+#blue and blue-white stars are massive, burn hot, and have a shorter lifespan than other stars. There is probably
+#less time for a planet to form.
 host_star_blue, host_star_bluewhite, host_star_white, host_star_yellowwhite, host_star_yellow, \
-   host_star_orange, host_star_red = kepler_koi_tools.get_confirmed_by_star_color(data)
+   host_star_orange, host_star_red = kepler_koi_tools.get_confirmed_by_host_color(data)
 print("Confirmed blue stars with exoplanets: " + str(host_star_blue))
 print("Confirmed blue-white stars with exoplanets: " + str(host_star_bluewhite))
 print("Confirmed white stars with exoplanets: " + str(host_star_white))

@@ -1,4 +1,4 @@
-object_name,luminosity,star_color,koi_pdisposition,koi_disposition
+object_name,host_luminosity,host_color,koi_pdisposition,koi_disposition
 Kepler-227 b,2.6242432895868476e+26,Yellow,CANDIDATE,CONFIRMED
 Kepler-227 c,2.6242432895868476e+26,Yellow,CANDIDATE,CONFIRMED
 OBJECT NAME WASN'T RECORDED,3.0494334099630672e+26,Yellow,CANDIDATE,CANDIDATE
