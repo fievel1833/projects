@@ -147,4 +147,5 @@ def get_confirmed_by_host_color(object_data):
             elif host_star == "Red":
                 host_star_red += 1
                 
-    return host_star_blue, host_star_bluewhite, host_star_white, host_star_yellowwhite, host_star_yellow, host_star_orange, host_star_red
+    return host_star_blue, host_star_bluewhite, host_star_white, host_star_yellowwhite, \
+        host_star_yellow, host_star_orange, host_star_red
