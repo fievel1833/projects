@@ -12,6 +12,9 @@ import kepler_koi_tools
 #TODO: see if I can implement parallelization since the dataset is large. Also look
 #        into libraries like multiprocessing or concurrent.futures.
 #TODO: explore caching for expensive calculations like luminosity estimation to avoid redundant computations
+#TODO: store data in a database such as MongoDb
+#TODO: implement an EFK stack for logging and visualization
+
 
 #Set the input and output paths
 input_path = 'kepler_projects\\python\\kepler_exoplanet_data\\koi_cumulative.csv'
