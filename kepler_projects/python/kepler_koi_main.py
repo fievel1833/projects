@@ -14,6 +14,7 @@ import kepler_koi_tools
 #TODO: explore caching for expensive calculations like luminosity estimation to avoid redundant computations
 #TODO: store data in a database such as MongoDb
 #TODO: implement an EFK stack for logging and visualization
+#TODO: explore mongodb or postgres instead of outputting to a csv
 
 
 #Set the input and output paths
