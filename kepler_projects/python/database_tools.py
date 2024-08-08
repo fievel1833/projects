@@ -18,7 +18,12 @@ def create_collection(db, collection_name):
     return collection
 
 def store_data(data):
-    client = connect_to_mongodb(connection_host, connection_port)
-    db = create_database(client, database_name)
-    collection = create_collection(db, collection_name)
-    collection.insert_one(data)
+    try:
+        client = connect_to_mongodb(connection_host, connection_port)
+        db = create_database(client, database_name)
+        collection = create_collection(db, collection_name)
+        collection.insert_one(data)
+        client.close()
+        
+    except Exception as e:
+        raise Exception("Unable to connect: ", e)
