@@ -39,7 +39,7 @@ objects = kepler_koi_tools.compile_list_of_objects(data)
 #If you supply a filepath for the output path, the
 #  data will be stored in a csv instead of attempting
 #  to store in a database first.
-database_tools.store_in_database(objects, output_path)
+database_tools.store_in_database(objects)
 
 #Print the results
 confirmed_exoplanets, false_positive_exoplanets, candidate_exoplanets, unknown = kepler_koi_tools.get_exoplanet_disposition(data)
