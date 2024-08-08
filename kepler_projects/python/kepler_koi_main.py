@@ -34,14 +34,12 @@ data = pd.read_csv(input_path)
 #Write the record to a csv and overwrite if it exists
 objects = kepler_koi_tools.compile_list_of_objects(data)
 
-try:
-   #Try to store our objects in mongodb, but use a csv
-   #  if there isn't a connection to the database
-   database_tools.store_data(objects)
-except:
-   print("*** No Database Connection *** ", e)
-   record_df = pd.DataFrame(objects, columns=["object_name", "host_luminosity", "host_color", "koi_pdisposition", "koi_disposition"])
-   record_df.to_csv(output_path, mode="w", header=True, index=False)
+#Try to store our objects in mongodb, but use a csv
+#  if there isn't a connection to the database.
+#If you supply a filepath for the output path, the
+#  data will be stored in a csv instead of attempting
+#  to store in a database first.
+database_tools.store_in_database(objects, output_path)
 
 #Print the results
 confirmed_exoplanets, false_positive_exoplanets, candidate_exoplanets, unknown = kepler_koi_tools.get_exoplanet_disposition(data)
