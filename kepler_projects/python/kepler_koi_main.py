@@ -1,5 +1,6 @@
 import pandas as pd
 import kepler_koi_tools
+import database_tools
 
 """This program reads the Kepler Objects of Interests list and calculates the
    estimated color of the star for each object, based on the Stefan-Boltzmann Law.
@@ -32,8 +33,15 @@ data = pd.read_csv(input_path)
 #Add the objects to the record with the appropriate columns
 #Write the record to a csv and overwrite if it exists
 objects = kepler_koi_tools.compile_list_of_objects(data)
-record_df = pd.DataFrame(objects, columns=["object_name", "host_luminosity", "host_color", "koi_pdisposition", "koi_disposition"])    
-record_df.to_csv(output_path, mode="w", header=True, index=False)
+
+try:
+   #Try to store our objects in mongodb, but use a csv
+   #  if there isn't a connection to the database
+   database_tools.store_data(objects)
+except:
+   print("*** No Database Connection *** ", e)
+   record_df = pd.DataFrame(objects, columns=["object_name", "host_luminosity", "host_color", "koi_pdisposition", "koi_disposition"])
+   record_df.to_csv(output_path, mode="w", header=True, index=False)
 
 #Print the results
 confirmed_exoplanets, false_positive_exoplanets, candidate_exoplanets, unknown = kepler_koi_tools.get_exoplanet_disposition(data)
@@ -43,9 +51,8 @@ print("Candidates: " + str(candidate_exoplanets))
 print("Unknowns: " + str(unknown))
 
 #Interestingly, while writing this program, I noticed no exoplanets were discovered around blue or blue-white stars by Kepler.
-#White and red stars had few exoplanets, and yellow stars had the most. I looked into why Kepler didn't find any exoplanets around
-# blue or blue-white stars and it turns out blue and blue-white stars are massive, burn hot, and have a shorter
-# lifespan than other stars. The belief is that those stars have less time for a planet to form. 
+#I looked into why and it turns out blue and blue-white stars are massive, burn hot, and have a shorter lifespan than other
+# stars. The belief is that those stars have less time for a planet to form.
 host_star_blue, host_star_bluewhite, host_star_white, host_star_yellowwhite, host_star_yellow, \
    host_star_orange, host_star_red = kepler_koi_tools.get_confirmed_by_host_color(data)
 print("Confirmed blue stars with exoplanets: " + str(host_star_blue))
