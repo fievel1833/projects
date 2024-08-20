@@ -13,10 +13,7 @@ import database_tools
 #TODO: see if I can implement parallelization since the dataset is large. Also look
 #        into libraries like multiprocessing or concurrent.futures.
 #TODO: explore caching for expensive calculations like luminosity estimation to avoid redundant computations
-#TODO: store data in a database such as MongoDb
 #TODO: implement an EFK stack for logging and visualization
-#TODO: explore mongodb or postgres instead of outputting to a csv
-
 
 #Set the input and output paths
 input_path = 'kepler_projects\\python\\kepler_exoplanet_data\\koi_cumulative.csv'
@@ -29,16 +26,14 @@ output_path = 'kepler_projects\\python\\kepler_exoplanet_data\\output_cumulative
 #https://exoplanetarchive.ipac.caltech.edu/docs/API_kepcandidate_columns.html.
 data = pd.read_csv(input_path)
 
-#Compile the list
-#Add the objects to the record with the appropriate columns
-#Write the record to a csv and overwrite if it exists
+#Iterate through the Kepler data and create a list of objects (presumably a star-planet system).
 objects = kepler_koi_tools.compile_list_of_objects(data)
 
 #Try to store our objects in mongodb, but use a csv
 #  if there isn't a connection to the database.
 #If you supply a filepath for the output path, the
-#  data will be stored in a csv instead of attempting
-#  to store in a database first.
+#  data will be written to a csv instead of attempting
+#  to store in a database.
 database_tools.store_in_database(objects)
 
 #Print the results
